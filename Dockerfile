@@ -1,12 +1,16 @@
-FROM openjdk:8-alpine
+FROM ubuntu
 
-#Required for starting application up.
-RUN apk update && apk add /bin/sh
+MAINTAINER hakeemog
 
-RUN mkdir -p /opt/app
-ENV PROJECT_HOME /opt/app
+RUN apt-get update && apt-get install -y apache2 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY target/spring-boot-mongo-1.0.jar $PROJECT_HOME/spring-boot-mongo.jar
+ENV APACHE_RUN_USER www-data
+ENV  APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+
+EXPOSE 80
+
+CMD [" /usr/sbin/apache2",  "-D" , "FOREGROUND"]
 
 WORKDIR $PROJECT_HOME
 
